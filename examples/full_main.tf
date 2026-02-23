@@ -69,7 +69,7 @@ module "identity" {
       support_url                    = "https://example.com/support"
       template_id                    = null
       terms_of_service_url           = "https://example.com/terms"
-      
+
       web = {
         homepage_url  = "https://example.com"
         logout_url    = "https://example.com/logout"
@@ -113,7 +113,7 @@ module "identity" {
       notification_email_addresses  = ["admin@example.com"]
       preferred_single_sign_on_mode = "saml"
       use_existing                  = false
-      
+
       feature_tags = {
         custom_single_sign_on = true
         enterprise            = true
