@@ -1,9 +1,9 @@
 output "user" {
   description = "Outputs all attributes of resource_type."
   value = {
-    for user in keys(azuread_user.users) :
+    for user in keys(azuread_user.user) :
     user => {
-      for key, value in azuread_user.users[user] :
+      for key, value in azuread_user.user[user] :
       key => value
     }
   }
@@ -12,9 +12,20 @@ output "user" {
 output "group" {
   description = "Outputs all attributes of resource_type."
   value = {
-    for group in keys(azuread_group.groups) :
+    for group in keys(azuread_group.group) :
     group => {
-      for key, value in azuread_group.groups[group] :
+      for key, value in azuread_group.group[group] :
+      key => value
+    }
+  }
+}
+
+output "group_member" {
+  description = "Outputs all attributes of resource_type."
+  value = {
+    for group_member in keys(azuread_group_member.group_member) :
+    group_member => {
+      for key, value in azuread_group_member.group_member[group_member] :
       key => value
     }
   }
@@ -23,20 +34,9 @@ output "group" {
 output "application" {
   description = "Outputs all attributes of resource_type."
   value = {
-    for application in keys(azuread_application.applications) :
+    for application in keys(azuread_application.application) :
     application => {
-      for key, value in azuread_application.applications[application] :
-      key => value
-    }
-  }
-}
-
-output "service_principal" {
-  description = "Outputs all attributes of resource_type."
-  value = {
-    for service_principal in keys(azuread_service_principal.service_principals) :
-    service_principal => {
-      for key, value in azuread_service_principal.service_principals[service_principal] :
+      for key, value in azuread_application.application[application] :
       key => value
     }
   }
@@ -45,21 +45,32 @@ output "service_principal" {
 output "application_password" {
   description = "Outputs all attributes of resource_type."
   value = {
-    for application_password in keys(azuread_application_password.passwords) :
+    for application_password in keys(azuread_application_password.application_password) :
     application_password => {
-      for key, value in azuread_application_password.passwords[application_password] :
+      for key, value in azuread_application_password.application_password[application_password] :
       key => value
     }
   }
   sensitive = true
 }
 
+output "service_principal" {
+  description = "Outputs all attributes of resource_type."
+  value = {
+    for service_principal in keys(azuread_service_principal.service_principal) :
+    service_principal => {
+      for key, value in azuread_service_principal.service_principal[service_principal] :
+      key => value
+    }
+  }
+}
+
 output "service_principal_password" {
   description = "Outputs all attributes of resource_type."
   value = {
-    for service_principal_password in keys(azuread_service_principal_password.passwords) :
+    for service_principal_password in keys(azuread_service_principal_password.service_principal_password) :
     service_principal_password => {
-      for key, value in azuread_service_principal_password.passwords[service_principal_password] :
+      for key, value in azuread_service_principal_password.service_principal_password[service_principal_password] :
       key => value
     }
   }

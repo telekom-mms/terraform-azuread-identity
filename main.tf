@@ -43,7 +43,7 @@ resource "azuread_user" "user" {
   street_address              = local.user[each.key].street_address
   surname                     = local.user[each.key].surname
   usage_location              = local.user[each.key].usage_location
-  user_principal_name         = replace(replace(replace(local.user[each.key].user_principal_name, "ü", "ue"), "ö", "oe"), "ä", "ae")
+  user_principal_name         = replace(replace(replace(local.user[each.key].user_principal_name, "ü", "ue"), "ö", "oe"), "ä", "ae") # codespell:ignore
 }
 
 resource "azuread_group" "group" {
@@ -134,12 +134,12 @@ resource "azuread_application" "application" {
 resource "azuread_application_password" "application_password" {
   for_each = var.application_password
 
-  application_object_id = local.application_password[each.key].application_object_id
-  display_name          = local.application_password[each.key].display_name == "" ? each.key : local.application_password[each.key].display_name
-  end_date              = local.application_password[each.key].end_date
-  end_date_relative     = local.application_password[each.key].end_date_relative
-  rotate_when_changed   = local.application_password[each.key].rotate_when_changed
-  start_date            = local.application_password[each.key].start_date
+  application_id      = local.application_password[each.key].application_id
+  display_name        = local.application_password[each.key].display_name == "" ? each.key : local.application_password[each.key].display_name
+  end_date            = local.application_password[each.key].end_date
+  end_date_relative   = local.application_password[each.key].end_date_relative
+  rotate_when_changed = local.application_password[each.key].rotate_when_changed
+  start_date          = local.application_password[each.key].start_date
 }
 
 resource "azuread_service_principal" "service_principal" {
@@ -148,7 +148,7 @@ resource "azuread_service_principal" "service_principal" {
   account_enabled               = local.service_principal[each.key].account_enabled
   alternative_names             = local.service_principal[each.key].alternative_names
   app_role_assignment_required  = local.service_principal[each.key].app_role_assignment_required
-  application_id                = local.service_principal[each.key].application_id
+  client_id                     = local.service_principal[each.key].client_id
   description                   = local.service_principal[each.key].description
   login_url                     = local.service_principal[each.key].login_url
   notes                         = local.service_principal[each.key].notes
