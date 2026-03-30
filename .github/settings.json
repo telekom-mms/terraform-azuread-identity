@@ -1,0 +1,20 @@
+{
+  "repos": {
+    "description": "A Terraform module that manages Azure AD resources.",
+    "visibility": "public",
+    "default_branch": "main",
+    "homepage": "https://telekom-mms.github.io/terraform-azuread-identity",
+    "topics": [
+      "azuread",
+      "identity",
+      "terraform",
+      "user",
+      "group",
+      "group-member",
+      "application",
+      "application-password",
+      "service-principal",
+      "service-principal-password"
+    ]
+  }
+}

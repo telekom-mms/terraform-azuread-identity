@@ -1,24 +1,11 @@
 /**
- * # accounts
- *
- * This module manages Azure AD Resources and Permissions.
- *
+* # identity
+*
+* This module manages the hashicorp/azuread resources.
+* For more information see https://registry.terraform.io/providers/hashicorp/azuread/latest/docs
+*
 */
 
-/** KeyVault Secret */
-resource "azurerm_key_vault_secret" "key_vault_secret" {
-  for_each = var.key_vault_secret
-
-  name            = local.key_vault_secret[each.key].name == "" ? each.key : local.key_vault_secret[each.key].name
-  value           = local.key_vault_secret[each.key].value
-  key_vault_id    = local.key_vault_secret[each.key].key_vault_id
-  content_type    = local.key_vault_secret[each.key].content_type
-  not_before_date = local.key_vault_secret[each.key].not_before_date
-  expiration_date = local.key_vault_secret[each.key].expiration_date
-  tags            = local.key_vault_secret[each.key].tags
-}
-
-/** User */
 resource "azuread_user" "user" {
   for_each = var.user
 
@@ -56,10 +43,9 @@ resource "azuread_user" "user" {
   street_address              = local.user[each.key].street_address
   surname                     = local.user[each.key].surname
   usage_location              = local.user[each.key].usage_location
-  user_principal_name         = replace(replace(replace(local.user[each.key].user_principal_name, "ü", "ue"), "ö", "oe"), "ä", "ae")
+  user_principal_name         = replace(replace(replace(local.user[each.key].user_principal_name, "ü", "ue"), "ö", "oe"), "ä", "ae") # codespell:ignore
 }
 
-/** Group */
 resource "azuread_group" "group" {
   for_each = var.group
 
@@ -92,7 +78,6 @@ resource "azuread_group" "group" {
   }
 }
 
-/** Group */
 resource "azuread_group_member" "group_member" {
   for_each = var.group_member
 
@@ -100,7 +85,6 @@ resource "azuread_group_member" "group_member" {
   member_object_id = local.group_member[each.key].member_object_id
 }
 
-/** App Registration */
 resource "azuread_application" "application" {
   for_each = var.application
 
@@ -147,26 +131,24 @@ resource "azuread_application" "application" {
   tags = local.application[each.key].tags
 }
 
-/** Application Password */
 resource "azuread_application_password" "application_password" {
   for_each = var.application_password
 
-  application_object_id = local.application_password[each.key].application_object_id
-  display_name          = local.application_password[each.key].display_name == "" ? each.key : local.application_password[each.key].display_name
-  end_date              = local.application_password[each.key].end_date
-  end_date_relative     = local.application_password[each.key].end_date_relative
-  rotate_when_changed   = local.application_password[each.key].rotate_when_changed
-  start_date            = local.application_password[each.key].start_date
+  application_id      = local.application_password[each.key].application_id
+  display_name        = local.application_password[each.key].display_name == "" ? each.key : local.application_password[each.key].display_name
+  end_date            = local.application_password[each.key].end_date
+  end_date_relative   = local.application_password[each.key].end_date_relative
+  rotate_when_changed = local.application_password[each.key].rotate_when_changed
+  start_date          = local.application_password[each.key].start_date
 }
 
-/** Service Principal */
 resource "azuread_service_principal" "service_principal" {
   for_each = var.service_principal
 
   account_enabled               = local.service_principal[each.key].account_enabled
   alternative_names             = local.service_principal[each.key].alternative_names
   app_role_assignment_required  = local.service_principal[each.key].app_role_assignment_required
-  application_id                = local.service_principal[each.key].application_id
+  client_id                     = local.service_principal[each.key].client_id
   description                   = local.service_principal[each.key].description
   login_url                     = local.service_principal[each.key].login_url
   notes                         = local.service_principal[each.key].notes
@@ -196,7 +178,7 @@ resource "azuread_service_principal" "service_principal" {
 
   tags = local.service_principal[each.key].tags
 }
-/** Service Principal Password*/
+
 resource "azuread_service_principal_password" "service_principal_password" {
   for_each = var.service_principal_password
 
@@ -206,20 +188,4 @@ resource "azuread_service_principal_password" "service_principal_password" {
   rotate_when_changed  = local.service_principal_password[each.key].rotate_when_changed
   service_principal_id = local.service_principal_password[each.key].service_principal_id
   start_date           = local.service_principal_password[each.key].start_date
-}
-
-/** Role Assignment*/
-resource "azurerm_role_assignment" "role_assignment" {
-  for_each = var.role_assignment
-
-  name                                   = local.role_assignment[each.key].name
-  scope                                  = local.role_assignment[each.key].scope
-  role_definition_name                   = local.role_assignment[each.key].role_definition_name
-  role_definition_id                     = local.role_assignment[each.key].role_definition_id
-  principal_id                           = local.role_assignment[each.key].principal_id
-  condition                              = local.role_assignment[each.key].condition
-  condition_version                      = local.role_assignment[each.key].condition_version
-  delegated_managed_identity_resource_id = local.role_assignment[each.key].delegated_managed_identity_resource_id
-  description                            = local.role_assignment[each.key].description
-  skip_service_principal_aad_check       = local.role_assignment[each.key].skip_service_principal_aad_check
 }
